@@ -1,0 +1,6 @@
+{
+  "name": "MedPulse Hospital Management System",
+  "description": "Enterprise Hospital Management System prototype with role-based access, patient registration, visit tracking, and itemized billing in PKR.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
