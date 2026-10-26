@@ -92,12 +92,15 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({
     }
   };
 
+  const [formError, setFormError] = useState<string | null>(null);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !age) {
-      alert('Please enter patient name and age.');
+      setFormError('Please enter patient name and age before proceeding.');
       return;
     }
+    setFormError(null);
 
     const now = new Date();
     const currentDate = now.toISOString().split('T')[0];
@@ -534,6 +537,14 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({
                 </div>
               </div>
             </div>
+
+            {/* Validation Error Banner */}
+            {formError && (
+              <div className="mx-6 mt-4 p-3 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center space-x-2">
+                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                <span>{formError}</span>
+              </div>
+            )}
 
             {/* Submit Action */}
             <div className="bg-slate-50 px-6 py-4 border-t border-slate-200 flex items-center justify-between">
