@@ -1,5 +1,5 @@
 {
-  "name": "MedPulse Hospital Management System",
+  "name": "Hospital Management System",
   "description": "Enterprise Hospital Management System prototype with role-based access, patient registration, visit tracking, and itemized billing in PKR.",
   "requestFramePermissions": [],
   "majorCapabilities": [
