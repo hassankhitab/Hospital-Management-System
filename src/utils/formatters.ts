@@ -1,5 +1,5 @@
 /**
- * Formatting utilities for MedPulse HMS
+ * Formatting utilities for Oghi Medical & Surgical Complex
  */
 
 export function formatPKR(amount: number): string {

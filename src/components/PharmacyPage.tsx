@@ -64,42 +64,39 @@ export const PharmacyPage: React.FC<PharmacyPageProps> = ({
   const categories = ['All', 'Antibiotic', 'Analgesic', 'IV Fluid', 'Cardiac', 'Anesthetic', 'Gastro'];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Top Banner */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
         <div>
-          <div className="flex items-center space-x-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-              CENTRAL DISPENSARY
-            </span>
-            <h1 className="text-xl font-bold text-slate-900">Hospital Central Pharmacy & Dispensing</h1>
-          </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Clinical prescription fulfillment linked to visit codes, medicine inventory stock, and pricing in PKR.
+          <h1 className="text-xl font-bold text-slate-900">Hospital Pharmacy</h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Prescription queue and medicine stock in PKR (₨)
           </p>
         </div>
 
         {/* View mode toggle */}
-        <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+        <div className="flex items-center space-x-1 bg-slate-100 p-1 rounded border border-slate-200">
           <button
             type="button"
             onClick={() => setActiveTab('queue')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-              activeTab === 'queue' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            className={`px-3 py-1 rounded text-xs font-semibold cursor-pointer ${
+              activeTab === 'queue'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Clock className="w-3.5 h-3.5" />
-            <span>Prescription Queue ({prescriptions.filter(p => p.status === 'Pending').length} Pending)</span>
+            Queue ({prescriptions.filter(p => p.status === 'Pending').length} Pending)
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('inventory')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-              activeTab === 'inventory' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            className={`px-3 py-1 rounded text-xs font-semibold cursor-pointer ${
+              activeTab === 'inventory'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Pill className="w-3.5 h-3.5" />
-            <span>Medicine Inventory ({inventory.length})</span>
+            Inventory ({inventory.length})
           </button>
         </div>
       </div>

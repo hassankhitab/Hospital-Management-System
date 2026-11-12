@@ -3,9 +3,9 @@ import { Patient, Bill, NurseryBaby, PharmacyItem, PharmacyPrescription, UserSes
 export const DEMO_USERS: UserSession[] = [
   {
     id: 'user-admin',
-    name: 'Dr. Arshad Khan',
+    name: 'Amir Ashraf',
     role: 'admin',
-    title: 'Medical Superintendent & Administrator',
+    title: 'Hospital Administrator & Executive Director',
     department: 'Hospital Administration',
     avatarColor: 'bg-teal-600',
   },
@@ -435,7 +435,7 @@ export const INITIAL_BILLS: Bill[] = [
     createdAt: '2026-10-15 19:45',
     status: 'Finalized',
     finalizedAt: '2026-10-15 20:10',
-    finalizedBy: 'Dr. Arshad Khan (MS)',
+    finalizedBy: 'Amir Ashraf (Administrator)',
     paymentMethod: 'Cash',
     notes: 'Emergency road traffic injury stabilization, laceration closure and emergency CT clearance.',
     items: [
@@ -493,7 +493,7 @@ export const INITIAL_BILLS: Bill[] = [
     createdAt: '2026-10-23 11:30',
     status: 'Finalized',
     finalizedAt: '2026-10-23 14:00',
-    finalizedBy: 'Dr. Arshad Khan (MS)',
+    finalizedBy: 'Amir Ashraf (Administrator)',
     paymentMethod: 'Bank Transfer',
     notes: 'Emergency Caesarean section delivery. Baby admitted to NICU for phototherapy & observation.',
     items: [

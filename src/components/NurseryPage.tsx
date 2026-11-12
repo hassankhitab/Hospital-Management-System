@@ -70,30 +70,23 @@ export const NurseryPage: React.FC<NurseryPageProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Top Banner */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
         <div>
-          <div className="flex items-center space-x-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200">
-              NICU & NURSERY CARE
-            </span>
-            <h1 className="text-xl font-bold text-slate-900">Neonatal Intensive Care Unit (NICU)</h1>
-          </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Active infant incubators, phototherapy tracking, feed schedules, and maternal patient linkage.
+          <h1 className="text-xl font-bold text-slate-900">Nursery & NICU Care</h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Active infant incubators, phototherapy, and feeding tracking
           </p>
         </div>
 
-        <div className="flex items-center space-x-3 text-xs">
-          <div className="flex items-center space-x-1.5 bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-lg text-rose-900 font-bold">
-            <Baby className="w-4 h-4 text-rose-600" />
-            <span>Active Admissions: {babies.length}</span>
-          </div>
-          <div className="flex items-center space-x-1.5 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg text-amber-900 font-bold">
-            <Sun className="w-4 h-4 text-amber-600" />
-            <span>Under Phototherapy: {babies.filter((b) => b.phototherapy).length}</span>
-          </div>
+        <div className="flex items-center space-x-2 text-xs">
+          <span className="px-2.5 py-1 bg-white border border-slate-200 rounded text-slate-700">
+            Admissions: <strong className="text-slate-900">{babies.length}</strong>
+          </span>
+          <span className="px-2.5 py-1 bg-white border border-slate-200 rounded text-slate-700">
+            Phototherapy: <strong className="text-amber-700">{babies.filter((b) => b.phototherapy).length}</strong>
+          </span>
         </div>
       </div>
 

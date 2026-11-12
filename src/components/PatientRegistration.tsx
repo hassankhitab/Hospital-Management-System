@@ -187,107 +187,95 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Header Banner */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
         <div>
-          <div className="flex items-center space-x-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800 border border-teal-200">
-              PAGE 1
-            </span>
-            <h1 className="text-xl font-bold text-slate-900">Patient Registration & Visit Generation</h1>
-          </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Create permanent Patient IDs (e.g., <code className="bg-slate-100 px-1 py-0.5 rounded text-teal-800 font-bold font-mono">P-000012</code>) and sequential Visit Codes (e.g., <code className="bg-slate-100 px-1 py-0.5 rounded text-teal-800 font-bold font-mono">P-000012-V03</code>).
+          <h1 className="text-xl font-bold text-slate-900">Patient Registration</h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Auto-generate Patient ID (e.g. <span className="font-mono font-semibold text-slate-700">P-000012</span>) and visit codes (<span className="font-mono font-semibold text-slate-700">P-000012-V03</span>)
           </p>
         </div>
 
         {/* Mode Toggle */}
-        <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+        <div className="flex items-center space-x-1 bg-slate-100 p-1 rounded border border-slate-200">
           <button
             type="button"
             onClick={() => handleModeChange('new')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3 py-1 rounded text-xs font-semibold cursor-pointer ${
               regMode === 'new'
-                ? 'bg-teal-600 text-white shadow-xs'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            + New Patient (Generate ID)
+            + New Patient
           </button>
           <button
             type="button"
             onClick={() => handleModeChange('returning')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3 py-1 rounded text-xs font-semibold cursor-pointer ${
               regMode === 'returning'
-                ? 'bg-teal-600 text-white shadow-xs'
+                ? 'bg-white text-slate-900 shadow-xs border border-slate-200'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            Returning Patient (Next Visit)
+            Returning Patient
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Main Form */}
         <div className="lg:col-span-2">
-          <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
+          <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-lg overflow-hidden">
             {/* Returning patient lookup sub-bar */}
             {regMode === 'returning' && (
-              <div className="bg-teal-50/70 p-4 border-b border-teal-100 space-y-3">
+              <div className="bg-slate-50 p-4 border-b border-slate-200 space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-teal-900 uppercase tracking-wider flex items-center space-x-1.5">
-                    <Search className="w-3.5 h-3.5 text-teal-700" />
-                    <span>Select Existing Patient Record</span>
+                  <span className="text-xs font-bold uppercase text-slate-700 flex items-center space-x-1.5">
+                    <Search className="w-3.5 h-3.5 text-slate-500" />
+                    <span>Select Existing Patient</span>
                   </span>
-                  <span className="text-xs text-teal-700">
-                    Existing ID will be preserved; visit number increments.
+                  <span className="text-[11px] text-slate-500">
+                    ID is kept, visit increments
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Filter by name, ID (e.g. P-000012), or phone..."
-                      value={patientSearch}
-                      onChange={(e) => setPatientSearch(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-teal-200 rounded-lg text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-teal-500"
-                    />
-                  </div>
-                  <div>
-                    <select
-                      value={selectedPatientId}
-                      onChange={(e) => {
-                        const p = patients.find((pat) => pat.id === e.target.value);
-                        if (p) handleSelectReturningPatient(p);
-                      }}
-                      className="w-full px-3 py-2 bg-white border border-teal-200 rounded-lg text-xs font-medium text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-teal-500"
-                    >
-                      {filteredPatients.map((p) => (
-                        <option key={p.id} value={p.id}>
-                          {p.id} - {p.name} ({p.visits.length} prior visits) - {p.city}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    placeholder="Search name, ID (e.g. P-000012), or phone..."
+                    value={patientSearch}
+                    onChange={(e) => setPatientSearch(e.target.value)}
+                    className="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded text-xs text-slate-800"
+                  />
+                  <select
+                    value={selectedPatientId}
+                    onChange={(e) => {
+                      const p = patients.find((pat) => pat.id === e.target.value);
+                      if (p) handleSelectReturningPatient(p);
+                    }}
+                    className="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded text-xs text-slate-800"
+                  >
+                    {filteredPatients.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.id} - {p.name} ({p.visits.length} visits)
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 {selectedPatientId && (
-                  <div className="text-xs text-teal-900 bg-teal-100/60 p-2.5 rounded-lg border border-teal-200 flex items-center justify-between">
-                    <div>
-                      <span className="font-bold">Target Patient:</span>{' '}
-                      <span className="font-mono font-bold text-teal-800">{selectedPatientId}</span>{' '}
-                      - {name} ({age}y / {sex})
-                    </div>
-                    <span className="font-mono bg-white px-2 py-0.5 rounded text-teal-700 border border-teal-300 font-bold">
-                      Next will generate: {generateVisitCode(selectedPatientId, (patients.find(p => p.id === selectedPatientId)?.visits.length || 0) + 1)}
+                  <div className="text-xs bg-white p-2 rounded border border-slate-200 flex items-center justify-between text-slate-700">
+                    <span>Selected: <strong>{name}</strong> ({selectedPatientId})</span>
+                    <span className="font-mono text-teal-700 font-semibold text-[11px]">
+                      Next Code: {generateVisitCode(selectedPatientId, (patients.find(p => p.id === selectedPatientId)?.visits.length || 0) + 1)}
                     </span>
                   </div>
                 )}
               </div>
             )}
+
 
             <div className="p-6 space-y-5">
               {/* Patient Demographics */}
@@ -540,61 +528,46 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({
 
             {/* Validation Error Banner */}
             {formError && (
-              <div className="mx-6 mt-4 p-3 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center space-x-2">
+              <div className="mx-6 mt-4 p-2.5 rounded bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center space-x-2">
                 <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
                 <span>{formError}</span>
               </div>
             )}
 
             {/* Submit Action */}
-            <div className="bg-slate-50 px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+            <div className="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex items-center justify-between">
               <span className="text-xs text-slate-500">
-                Automatically computes sequential Visit Number & Patient ID on save.
+                Auto-generates sequential ID & Visit Code on save
               </span>
               <button
                 type="submit"
-                className="px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-teal-700/20 flex items-center space-x-2 cursor-pointer"
+                className="px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-md text-xs font-semibold flex items-center space-x-1.5 cursor-pointer"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 <span>
-                  {regMode === 'new' ? 'Save & Generate Patient ID' : 'Save & Generate Next Visit Code'}
+                  {regMode === 'new' ? 'Save & Generate ID' : 'Save & Generate Visit'}
                 </span>
               </button>
             </div>
           </form>
         </div>
 
-        {/* Right Column: Information & Recent Queue */}
+        {/* Right Column: Simple Info & Quick Pick */}
         <div className="space-y-4">
-          <div className="bg-gradient-to-br from-teal-900 to-slate-900 text-white p-5 rounded-xl shadow-md border border-teal-800/60">
-            <div className="flex items-center space-x-2 text-teal-300 text-xs font-bold uppercase tracking-wider mb-2">
-              <Sparkles className="w-4 h-4" />
-              <span>ID & Visit Code Logic</span>
-            </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              In accordance with hospital clinical records policy:
-            </p>
-            <div className="mt-3 space-y-2 text-xs">
-              <div className="bg-teal-950/60 p-2.5 rounded-lg border border-teal-700/50">
-                <span className="font-semibold text-teal-200">New Patients:</span>
-                <p className="text-[11px] text-slate-300 mt-0.5">
-                  Assigned permanent ID: <code className="text-teal-300 font-mono font-bold">P-000046</code> and first visit <code className="text-teal-300 font-mono font-bold">P-000046-V01</code>.
-                </p>
-              </div>
-              <div className="bg-teal-950/60 p-2.5 rounded-lg border border-teal-700/50">
-                <span className="font-semibold text-teal-200">Returning Patients:</span>
-                <p className="text-[11px] text-slate-300 mt-0.5">
-                  Permanent ID stays unchanged (e.g. <code className="text-teal-300 font-mono font-bold">P-000012</code>) and visit increments (e.g. <code className="text-teal-300 font-mono font-bold">P-000012-V04</code>).
-                </p>
-              </div>
+          <div className="bg-white border border-slate-200 p-4 rounded-lg text-xs space-y-2">
+            <h4 className="font-semibold text-slate-800 uppercase tracking-wider text-[11px]">
+              ID & Visit Logic
+            </h4>
+            <div className="space-y-1.5 text-slate-600">
+              <p>• <strong>New:</strong> ID generated as <code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-teal-700">P-000046</code> and first visit <code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-teal-700">P-000046-V01</code>.</p>
+              <p>• <strong>Returning:</strong> ID stays same (<code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-teal-700">P-000012</code>) and visit increments (<code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-teal-700">P-000012-V04</code>).</p>
             </div>
           </div>
 
-          {/* Quick List of Sample Patients for Instant Visit Test */}
-          <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs">
-            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center justify-between">
-              <span>Existing Patient Records ({patients.length})</span>
-              <span className="text-[10px] text-teal-600 font-mono">Quick Pick</span>
+          {/* Quick List of Sample Patients */}
+          <div className="bg-white border border-slate-200 rounded-lg p-3.5">
+            <h4 className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2 flex items-center justify-between">
+              <span>Quick Select ({patients.length})</span>
             </h4>
             <div className="divide-y divide-slate-100 max-h-72 overflow-y-auto">
               {patients.slice(0, 5).map((p) => (
@@ -604,16 +577,16 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({
                     handleModeChange('returning');
                     handleSelectReturningPatient(p);
                   }}
-                  className="py-2 px-1 hover:bg-slate-50 cursor-pointer flex items-center justify-between text-xs transition-colors rounded"
+                  className="py-2 px-1 hover:bg-slate-50 cursor-pointer flex items-center justify-between text-xs rounded"
                 >
                   <div>
                     <div className="flex items-center space-x-1.5">
-                      <span className="font-mono font-bold text-teal-700">{p.id}</span>
-                      <span className="font-semibold text-slate-800">{p.name}</span>
+                      <span className="font-mono font-semibold text-teal-700">{p.id}</span>
+                      <span className="font-medium text-slate-800">{p.name}</span>
                     </div>
-                    <span className="text-[11px] text-slate-400">{p.visits.length} prior visits • {p.city}</span>
+                    <span className="text-[11px] text-slate-400">{p.visits.length} visits</span>
                   </div>
-                  <span className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono">
+                  <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded font-mono">
                     Next V{p.visits.length + 1}
                   </span>
                 </div>
@@ -623,69 +596,47 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({
         </div>
       </div>
 
+
       {/* Success Modal / Banner */}
       {successInfo && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center">
-                  <CheckCircle2 className="w-7 h-7" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900">
-                    {successInfo.isNew ? 'Patient Successfully Registered!' : 'New Visit Created for Existing Patient!'}
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Registration record saved to clinical database.
-                  </p>
-                </div>
+        <div className="fixed inset-0 bg-slate-900/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full p-5 shadow-lg border border-slate-200">
+            <div className="flex items-center space-x-2.5">
+              <CheckCircle2 className="w-5 h-5 text-teal-700" />
+              <div>
+                <h3 className="text-base font-bold text-slate-900">
+                  {successInfo.isNew ? 'Patient Registered' : 'New Visit Created'}
+                </h3>
+                <p className="text-xs text-slate-500">Record saved successfully.</p>
               </div>
             </div>
 
-            {/* Generated Codes Highlight Box */}
-            <div className="my-5 bg-gradient-to-r from-teal-50 to-cyan-50 border border-teal-200 rounded-xl p-4 space-y-3">
-              <div className="grid grid-cols-2 gap-3 text-center">
-                <div className="bg-white p-3 rounded-lg border border-teal-200/80 shadow-xs">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-teal-700">Permanent Patient ID</span>
-                  <div className="font-mono text-xl font-extrabold text-teal-900 mt-1">
+            {/* Generated Codes */}
+            <div className="my-4 bg-slate-50 border border-slate-200 rounded p-3 space-y-2">
+              <div className="grid grid-cols-2 gap-2 text-center text-xs">
+                <div className="bg-white p-2 rounded border border-slate-200">
+                  <span className="text-[10px] uppercase text-slate-400 block font-semibold">Patient ID</span>
+                  <div className="font-mono text-base font-bold text-slate-900 mt-0.5">
                     {successInfo.patient.id}
                   </div>
-                  <span className="text-[10px] text-slate-400">Fixed Medical Record Number</span>
                 </div>
 
-                <div className="bg-white p-3 rounded-lg border border-teal-200/80 shadow-xs">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-teal-700">Generated Visit Code</span>
-                  <div className="font-mono text-xl font-extrabold text-teal-900 mt-1">
+                <div className="bg-white p-2 rounded border border-slate-200">
+                  <span className="text-[10px] uppercase text-slate-400 block font-semibold">Visit Code</span>
+                  <div className="font-mono text-base font-bold text-teal-800 mt-0.5">
                     {successInfo.visit.visitCode}
                   </div>
-                  <span className="text-[10px] text-slate-400">Visit #{successInfo.visit.visitNumber} ({successInfo.visit.visitType})</span>
                 </div>
               </div>
 
-              {/* Barcode representation */}
-              <div className="bg-white p-2.5 rounded-lg border border-slate-200 text-center">
-                <div className="font-mono text-2xl tracking-[0.3em] font-bold text-slate-800 select-all">
-                  ||| | |||| | ||||| || | |||
-                </div>
-                <div className="font-mono text-[10px] text-slate-500 mt-0.5 tracking-wider">
-                  *{successInfo.visit.visitCode}*
-                </div>
-              </div>
-
-              {/* Summary Details */}
-              <div className="text-xs text-slate-700 space-y-1 pt-1 border-t border-teal-100">
+              <div className="text-xs text-slate-600 pt-1 space-y-0.5 border-t border-slate-200">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Patient:</span>
-                  <span className="font-bold">{successInfo.patient.name} ({successInfo.patient.age}y / {successInfo.patient.sex})</span>
+                  <span>Patient:</span>
+                  <strong className="text-slate-800">{successInfo.patient.name}</strong>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Consultant:</span>
-                  <span className="font-medium">{successInfo.visit.assignedDoctor}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Complaint:</span>
-                  <span className="truncate max-w-xs">{successInfo.visit.complaint}</span>
+                  <span>Doctor:</span>
+                  <span>{successInfo.visit.assignedDoctor}</span>
                 </div>
               </div>
             </div>
@@ -701,10 +652,10 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({
                     setSuccessInfo(null);
                     onOpenFolder(pid, vcode);
                   }}
-                  className="py-2.5 px-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors shadow-xs cursor-pointer"
+                  className="py-1.5 px-3 bg-teal-700 hover:bg-teal-800 text-white rounded text-xs font-semibold flex items-center justify-center space-x-1 cursor-pointer"
                 >
-                  <FolderOpen className="w-4 h-4" />
-                  <span>Open Patient Folder</span>
+                  <FolderOpen className="w-3.5 h-3.5" />
+                  <span>Open Folder</span>
                 </button>
 
                 {currentRole === 'admin' && onOpenBillingForVisit ? (
@@ -716,21 +667,19 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({
                       setSuccessInfo(null);
                       onOpenBillingForVisit(pid, vcode);
                     }}
-                    className="py-2.5 px-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors shadow-xs cursor-pointer"
+                    className="py-1.5 px-3 bg-slate-900 hover:bg-slate-800 text-white rounded text-xs font-semibold flex items-center justify-center space-x-1 cursor-pointer"
                   >
-                    <Receipt className="w-4 h-4" />
-                    <span>Create Hospital Bill</span>
+                    <Receipt className="w-3.5 h-3.5" />
+                    <span>Create Bill</span>
                   </button>
                 ) : (
                   <button
                     type="button"
-                    onClick={() => {
-                      window.print();
-                    }}
-                    className="py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors cursor-pointer"
+                    onClick={() => window.print()}
+                    className="py-1.5 px-3 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded text-xs font-semibold flex items-center justify-center space-x-1 cursor-pointer"
                   >
-                    <Printer className="w-4 h-4" />
-                    <span>Print Token Slip</span>
+                    <Printer className="w-3.5 h-3.5" />
+                    <span>Print Token</span>
                   </button>
                 )}
               </div>
@@ -741,9 +690,9 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({
                   setSuccessInfo(null);
                   handleModeChange('new');
                 }}
-                className="w-full py-2 text-slate-500 hover:text-slate-800 text-xs font-medium text-center hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                className="w-full py-1.5 text-slate-500 hover:text-slate-800 text-xs font-medium cursor-pointer"
               >
-                Register Another Patient
+                Close / Register Another
               </button>
             </div>
           </div>

@@ -176,7 +176,7 @@ export const BillingPage: React.FC<BillingPageProps> = ({
         ...currentBill,
         status: 'Finalized',
         finalizedAt: new Date().toISOString().replace('T', ' ').substring(0, 16),
-        finalizedBy: 'Dr. Arshad Khan (Admin)',
+        finalizedBy: 'Amir Ashraf (Admin)',
       };
       onUpdateBill(updated);
     } else {
@@ -268,40 +268,35 @@ export const BillingPage: React.FC<BillingPageProps> = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Top Banner & Invoice Selector */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
         <div>
-          <div className="flex items-center space-x-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800 border border-teal-200">
-              PAGE 2
-            </span>
-            <h1 className="text-xl font-bold text-slate-900">Hospital Billing & Itemized Manual Entry</h1>
-          </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Linked to patient folders. All currency calculations in Pakistani Rupees (PKR / Rs.). Draft bills can be edited; finalized bills lock with admin reopen.
+          <h1 className="text-xl font-bold text-slate-900">Hospital Billing</h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Itemized charges in PKR (₨) linked to patient folders
           </p>
         </div>
 
         {/* Bill Switcher & New Bill button */}
-        <div className="flex items-center space-x-2 overflow-x-auto">
+        <div className="flex items-center space-x-1.5 overflow-x-auto">
           {bills.map((b) => {
             const isSel = b.id === selectedBillId;
             return (
               <button
                 key={b.id}
                 onClick={() => setSelectedBillId(b.id)}
-                className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all flex items-center space-x-2 border cursor-pointer ${
+                className={`px-2.5 py-1 rounded text-xs font-medium border cursor-pointer ${
                   isSel
-                    ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
-                    : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border-slate-200'
+                    ? 'bg-teal-700 text-white border-teal-700 font-semibold'
+                    : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-300'
                 }`}
               >
                 <span className="font-mono">{b.id}</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded font-sans font-bold ${
+                <span className={`text-[10px] ml-1.5 px-1 py-0.2 rounded font-sans ${
                   b.status === 'Finalized'
-                    ? isSel ? 'bg-teal-700 text-teal-100' : 'bg-emerald-100 text-emerald-800'
-                    : isSel ? 'bg-teal-700 text-teal-100' : 'bg-amber-100 text-amber-800'
+                    ? isSel ? 'bg-teal-800 text-teal-100' : 'bg-emerald-50 text-emerald-700'
+                    : isSel ? 'bg-teal-800 text-teal-100' : 'bg-amber-50 text-amber-700'
                 }`}>
                   {b.status}
                 </span>
@@ -311,99 +306,82 @@ export const BillingPage: React.FC<BillingPageProps> = ({
 
           <button
             onClick={handleStartNewBill}
-            className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center space-x-1 shrink-0 cursor-pointer"
+            className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded text-xs font-medium cursor-pointer shrink-0"
           >
-            <Plus className="w-3.5 h-3.5" />
-            <span>+ New Bill</span>
+            + New Bill
           </button>
         </div>
       </div>
 
       {/* Patient & Visit Context Header Bar */}
-      <div className="bg-slate-900 text-white rounded-xl p-5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-300 font-bold">
-            <Receipt className="w-6 h-6" />
+      <div className="bg-white border border-slate-200 rounded-lg p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div>
+          <div className="flex items-center space-x-2">
+            <span className="font-mono text-sm font-bold text-slate-900">{currentBill.id}</span>
+            <span className="text-slate-400">•</span>
+            <span className="text-sm font-semibold text-slate-900">
+              {linkedPatient ? linkedPatient.name : currentBill.patientId}
+            </span>
+            <span className="font-mono text-xs text-teal-700 bg-slate-100 px-1.5 py-0.5 rounded">
+              {currentBill.patientId}
+            </span>
+            <span className="font-mono text-xs text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">
+              {currentBill.visitCode}
+            </span>
           </div>
-          <div>
-            <div className="flex items-center space-x-2.5">
-              <span className="font-mono text-base font-extrabold text-teal-300">{currentBill.id}</span>
-              <span className="text-slate-400">•</span>
-              <span className="text-slate-200 text-sm font-bold">
-                Patient: {linkedPatient ? linkedPatient.name : currentBill.patientId}
-              </span>
-              <span className="font-mono text-xs bg-slate-800 px-2 py-0.5 rounded text-teal-400 border border-slate-700 font-bold">
-                {currentBill.patientId}
-              </span>
-            </div>
-            <div className="flex items-center space-x-3 text-xs text-slate-400 mt-1">
-              <span>Visit Code: <strong className="text-slate-200 font-mono">{currentBill.visitCode}</strong></span>
-              <span>•</span>
-              <span>Type: <strong className="text-slate-200">{linkedVisit?.visitType || 'Clinical'}</strong></span>
-              <span>•</span>
-              <span>Consultant: <strong className="text-slate-200">{linkedVisit?.assignedDoctor || 'General'}</strong></span>
-              <span>•</span>
-              <span>Date: {currentBill.createdAt}</span>
-            </div>
-          </div>
+          <p className="text-xs text-slate-500 mt-1">
+            {linkedVisit?.visitType || 'Clinical'} • {linkedVisit?.assignedDoctor || 'General'} • Created {currentBill.createdAt}
+          </p>
         </div>
 
         {/* Lock Status & Action Controls */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2">
           <button
             type="button"
             onClick={() => setIsPrintModalOpen(true)}
-            className="px-3.5 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 shadow-xs cursor-pointer"
+            className="px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded text-xs font-medium flex items-center space-x-1.5 cursor-pointer"
           >
-            <Printer className="w-4 h-4" />
-            <span>Printable Invoice View</span>
+            <Printer className="w-3.5 h-3.5" />
+            <span>Print Invoice</span>
           </button>
 
           {isLocked ? (
-            <div className="flex items-center space-x-2">
-              <div className="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
-                <Lock className="w-3.5 h-3.5" />
-                <span>FINALIZED (LOCKED)</span>
-              </div>
+            <div className="flex items-center space-x-1.5">
+              <span className="text-xs text-emerald-700 font-semibold bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded">
+                Finalized (Locked)
+              </span>
               <button
                 type="button"
                 onClick={handleToggleFinalize}
-                className="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 shadow-xs cursor-pointer"
-                title="Unlock bill for adjustments"
+                className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-xs font-medium cursor-pointer"
               >
-                <Unlock className="w-3.5 h-3.5" />
-                <span>Reopen Bill</span>
+                Reopen
               </button>
             </div>
           ) : (
             <button
               type="button"
               onClick={handleToggleFinalize}
-              className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 shadow-xs cursor-pointer"
+              className="px-3 py-1.5 bg-teal-700 hover:bg-teal-800 text-white rounded text-xs font-semibold cursor-pointer"
             >
-              <CheckCircle className="w-4 h-4" />
-              <span>Finalize Bill (Lock)</span>
+              Finalize Bill
             </button>
           )}
         </div>
       </div>
 
+
       {/* Lock Notice Banner if Finalized */}
       {isLocked && (
-        <div className="bg-amber-50 border border-amber-300 rounded-xl p-4 flex items-center justify-between text-xs text-amber-900">
-          <div className="flex items-center space-x-2.5">
-            <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0" />
-            <div>
-              <span className="font-bold">Bill is Finalized and Locked for modifications.</span>
-              <p className="text-[11px] text-amber-800 mt-0.5">
-                All itemized figures, discounts, and payments are protected. Click <strong>&quot;Reopen Bill&quot;</strong> above if you need to add or modify line items.
-              </p>
-            </div>
+        <div className="bg-amber-50 border border-amber-200 rounded p-3 flex items-center justify-between text-xs text-amber-900">
+          <div className="flex items-center space-x-2">
+            <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0" />
+            <span>Bill is Finalized (locked). Reopen to modify items.</span>
           </div>
           <button
             type="button"
             onClick={handleToggleFinalize}
-            className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg text-xs shadow-xs cursor-pointer shrink-0"
+            className="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-xs font-medium cursor-pointer"
           >
             Reopen Bill
           </button>
@@ -411,19 +389,13 @@ export const BillingPage: React.FC<BillingPageProps> = ({
       )}
 
       {/* Itemized Line Items Table */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
-        <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2">
-              <Receipt className="w-4 h-4 text-teal-600" />
-              <span>Itemized Charge Items ({currentBill.items.length})</span>
-            </h3>
-            <p className="text-xs text-slate-500">
-              Categorized charges for Doctor Fee, Operation, Anesthesia, Room, Treatment, Meds, OT, Lab, Other
-            </p>
-          </div>
-          <span className="text-xs font-mono font-bold text-teal-800 bg-teal-50 px-2.5 py-1 rounded border border-teal-200">
-            Total Items Subtotal: {formatPKR(currentBill.subtotal)}
+      <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
+        <div className="p-3 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+            Line Items ({currentBill.items.length})
+          </h3>
+          <span className="text-xs font-mono font-semibold text-slate-800">
+            Subtotal: {formatPKR(currentBill.subtotal)}
           </span>
         </div>
 

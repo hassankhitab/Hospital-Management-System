@@ -48,25 +48,17 @@ export const PatientDirectory: React.FC<PatientDirectoryProps> = ({
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Header Banner */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
         <div>
-          <div className="flex items-center space-x-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800 border border-teal-200">
-              CLINICAL DIRECTORY
-            </span>
-            <h1 className="text-xl font-bold text-slate-900">Hospital Patient Directory & Medical Folders</h1>
-          </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Complete registry of all registered patients, lifetime visits history, and linked financial accounts.
+          <h1 className="text-xl font-bold text-slate-900">Patient Directory</h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Registered medical folders and records ({patients.length} total)
           </p>
         </div>
-
-        <div className="flex items-center space-x-2">
-          <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
-            Total Patients: <strong className="text-slate-900">{patients.length}</strong>
-          </span>
+        <div className="text-xs text-slate-500">
+          Showing {filteredPatients.length} of {patients.length} patients
         </div>
       </div>
 

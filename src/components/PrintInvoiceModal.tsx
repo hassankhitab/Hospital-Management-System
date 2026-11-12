@@ -58,18 +58,18 @@ export const PrintInvoiceModal: React.FC<PrintInvoiceModalProps> = ({
               </div>
               <div>
                 <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-                  MEDPULSE CARE HOSPITAL
+                  OGHI MEDICAL & SURGICAL COMPLEX
                 </h1>
                 <p className="text-xs font-semibold text-teal-800 tracking-wide uppercase">
-                  Tertiary Healthcare & Research Institute • Shifa Complex
+                  Comprehensive Healthcare & Diagnostic Center • Oghi
                 </p>
                 <p className="text-[11px] text-slate-500 mt-1">
-                  Plot 12-B, Hospital Boulevard, Sector H-8/4, Islamabad, Pakistan
+                  Main Bazar, Battagram Road, Oghi, Khyber Pakhtunkhwa, Pakistan
                 </p>
                 <div className="flex items-center space-x-3 text-[11px] text-slate-500 mt-0.5">
-                  <span>Tel: +92 (51) 844-0000</span>
+                  <span>Admin: Amir Ashraf</span>
                   <span>•</span>
-                  <span>UAN: 111-MED-HMS</span>
+                  <span>Contact: +92 (997) 530-000</span>
                   <span>•</span>
                   <span className="font-mono font-semibold text-slate-700">NTN: 4892011-8</span>
                 </div>
@@ -225,7 +225,7 @@ export const PrintInvoiceModal: React.FC<PrintInvoiceModalProps> = ({
             <div>
               <div className="h-12 flex items-center justify-center">
                 <div className="border border-teal-600 rounded-full px-3 py-1 text-[10px] font-bold text-teal-800 uppercase tracking-wider rotate-[-5deg] bg-teal-50">
-                  SHIFA HMS VERIFIED
+                  OGHI COMPLEX VERIFIED
                 </div>
               </div>
               <span className="font-semibold text-slate-700 block mt-2">Cashier / Billing Desk</span>
@@ -234,11 +234,15 @@ export const PrintInvoiceModal: React.FC<PrintInvoiceModalProps> = ({
 
             <div>
               <div className="h-12 border-b border-dashed border-slate-300 mx-6 flex items-end justify-center pb-1">
-                <span className="font-mono text-[11px] text-slate-600 italic">Dr. Arshad Khan (MS)</span>
+                <span className="font-mono text-[11px] text-slate-600 italic">Amir Ashraf</span>
               </div>
-              <span className="font-semibold text-slate-700 block mt-2">Medical Superintendent</span>
-              <span className="text-[10px] text-slate-400">Authorized Signatory</span>
+              <span className="font-semibold text-slate-700 block mt-2">Amir Ashraf</span>
+              <span className="text-[10px] text-slate-400">Hospital Administrator</span>
             </div>
+          </div>
+
+          <div className="pt-4 text-center text-[10px] text-slate-400 border-t border-slate-100">
+            Oghi Medical & Surgical Complex • Project Developed by <span className="font-semibold text-slate-600">Hassan Khitab</span>
           </div>
         </div>
       </div>

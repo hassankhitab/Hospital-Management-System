@@ -57,32 +57,29 @@ export const PatientFolderView: React.FC<PatientFolderViewProps> = ({
   const totalBalance = linkedBills.reduce((acc, b) => acc + b.balance, 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Top Header & Breadcrumb */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center space-x-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+        <div className="flex items-center space-x-2.5">
           <button
             onClick={onClose}
-            className="p-2 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-600 transition-colors cursor-pointer"
-            title="Back"
+            className="p-1.5 rounded border border-slate-300 hover:bg-slate-50 text-slate-600 transition-colors cursor-pointer"
+            title="Back to Directory"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-4 h-4" />
           </button>
           <div>
-            <div className="flex items-center space-x-2.5">
-              <span className="font-mono text-sm font-extrabold bg-teal-100 text-teal-800 border border-teal-200 px-2.5 py-0.5 rounded-md">
+            <div className="flex items-center space-x-2">
+              <span className="font-mono text-xs font-bold text-teal-800 bg-slate-100 px-2 py-0.5 rounded">
                 {patient.id}
               </span>
-              <h1 className="text-xl font-bold text-slate-900">{patient.name}</h1>
-              <span className="text-xs text-slate-500 font-medium">
-                ({patient.age} yrs • {patient.sex})
-              </span>
-              <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-semibold border border-slate-200">
-                {patient.visits.length} {patient.visits.length === 1 ? 'Visit Record' : 'Visit Records'}
+              <h1 className="text-lg font-bold text-slate-900">{patient.name}</h1>
+              <span className="text-xs text-slate-500">
+                ({patient.age}y, {patient.sex})
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-1">
-              Registered on: {patient.registeredDate} • Permanent Electronic Medical Record (EMR)
+            <p className="text-xs text-slate-400">
+              Registered: {patient.registeredDate} • {patient.visits.length} recorded visits
             </p>
           </div>
         </div>
@@ -91,25 +88,25 @@ export const PatientFolderView: React.FC<PatientFolderViewProps> = ({
           <button
             type="button"
             onClick={() => onAddNewVisit(patient.id)}
-            className="px-3.5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-bold transition-all shadow-xs flex items-center space-x-1.5 cursor-pointer"
+            className="px-3 py-1.5 bg-teal-700 hover:bg-teal-800 text-white rounded text-xs font-semibold flex items-center space-x-1 cursor-pointer"
           >
-            <PlusCircle className="w-4 h-4" />
-            <span>+ Add Next Visit</span>
+            <PlusCircle className="w-3.5 h-3.5" />
+            <span>+ Add Visit</span>
           </button>
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-all flex items-center space-x-1.5 cursor-pointer"
+            className="px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded text-xs font-medium flex items-center space-x-1 cursor-pointer"
           >
-            <Printer className="w-4 h-4" />
-            <span>Print Folder</span>
+            <Printer className="w-3.5 h-3.5" />
+            <span>Print</span>
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-slate-600 rounded cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
       </div>

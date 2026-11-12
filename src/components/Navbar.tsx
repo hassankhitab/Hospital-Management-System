@@ -1,17 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UserSession, Patient } from '../types/hms';
 import { parseSearchQuery } from '../utils/formatters';
-import { 
-  Search, 
-  History, 
-  UserCircle2, 
-  LogOut, 
-  Sparkles, 
-  ChevronRight,
-  Clock,
-  Layers,
-  ArrowRight
-} from 'lucide-react';
+import { Search, ChevronRight, LogOut, ChevronDown } from 'lucide-react';
 
 interface NavbarProps {
   currentUser: UserSession;
@@ -38,7 +28,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const roleMenuRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
@@ -52,7 +41,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Compute live search suggestions
   const parsed = parseSearchQuery(searchQuery);
   const queryTrimmed = searchQuery.trim().toLowerCase();
 
@@ -66,7 +54,6 @@ export const Navbar: React.FC<NavbarProps> = ({
       })
     : [];
 
-  // Look for specific visit matches if query matches visit pattern
   const specificVisitMatches = queryTrimmed
     ? patients.flatMap((p) =>
         p.visits
@@ -82,7 +69,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     const parsedInfo = parseSearchQuery(searchQuery);
 
     if (parsedInfo.isSpecificVisit && parsedInfo.visitCodeQuery) {
-      // Find patient with this visit
       const targetPatient = patients.find((p) =>
         p.visits.some((v) => v.visitCode.toUpperCase() === parsedInfo.visitCodeQuery?.toUpperCase())
       );
@@ -94,7 +80,6 @@ export const Navbar: React.FC<NavbarProps> = ({
       }
     }
 
-    // Try finding by normalized patient ID (e.g. "12" -> "P-000012")
     const foundById = patients.find(
       (p) => p.id.toUpperCase() === parsedInfo.patientIdQuery.toUpperCase()
     );
@@ -105,7 +90,6 @@ export const Navbar: React.FC<NavbarProps> = ({
       return;
     }
 
-    // Fallback: match by first matching result
     if (matchingPatients.length > 0) {
       onOpenPatientFolder(matchingPatients[0].id);
       setSearchQuery('');
@@ -114,42 +98,37 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <header className="bg-white border-b border-slate-200 sticky top-0 z-30">
       <div className="px-6 py-2.5 flex items-center justify-between gap-4">
-        {/* Left: Quick search for Admin, or Greeting for other roles */}
-        <div className="flex-1 max-w-3xl">
+        {/* Left: Quick search for Admin */}
+        <div className="flex-1 max-w-xl">
           {currentUser.role === 'admin' ? (
             <div className="relative" ref={searchContainerRef}>
               <form onSubmit={handleSearchSubmit} className="relative flex items-center">
-                <div className="absolute left-3.5 pointer-events-none text-teal-600">
-                  <Search className="w-4 h-4" />
-                </div>
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
-                  placeholder='Quick Search: Type "12", "P-000012", or "P-000012-V03" for direct jump...'
-                  className="w-full pl-10 pr-24 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-teal-500/30 focus:border-teal-600 focus:bg-white transition-all shadow-xs"
+                  placeholder='Quick search by "12", "P-000012", or "P-000012-V03"...'
+                  className="w-full pl-9 pr-16 py-1.5 bg-slate-50 border border-slate-200 rounded-md text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-600 transition-colors"
                 />
                 <button
                   type="submit"
-                  className="absolute right-1.5 px-2.5 py-1 text-xs font-semibold bg-teal-600 hover:bg-teal-700 text-white rounded-md transition-colors shadow-xs flex items-center space-x-1"
+                  className="absolute right-1 px-2.5 py-1 text-[11px] font-semibold bg-teal-700 hover:bg-teal-800 text-white rounded cursor-pointer"
                 >
-                  <span>Find</span>
-                  <ArrowRight className="w-3 h-3" />
+                  Find
                 </button>
               </form>
 
-              {/* Autocomplete dropdown */}
+              {/* Suggestions */}
               {isSearchFocused && (searchQuery.trim().length > 0 || recentPatients.length > 0) && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden divide-y divide-slate-100 max-h-96 overflow-y-auto">
-                  {/* Direct visit jump suggestions */}
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-md shadow-lg z-50 divide-y divide-slate-100 max-h-80 overflow-y-auto">
                   {specificVisitMatches.length > 0 && (
                     <div className="p-2 bg-teal-50/50">
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-teal-800 px-2.5 py-1 flex items-center space-x-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-teal-600" />
-                        <span>Direct Visit Match (Jump directly to visit)</span>
+                      <div className="text-[10px] font-semibold uppercase text-teal-800 px-2 py-0.5">
+                        Direct Visit Match
                       </div>
                       {specificVisitMatches.slice(0, 3).map(({ patient, visit }) => (
                         <div
@@ -159,33 +138,22 @@ export const Navbar: React.FC<NavbarProps> = ({
                             setSearchQuery('');
                             setIsSearchFocused(false);
                           }}
-                          className="px-3 py-2 rounded-lg hover:bg-teal-100/70 cursor-pointer flex items-center justify-between text-xs transition-colors"
+                          className="px-2 py-1.5 rounded hover:bg-teal-100 cursor-pointer flex items-center justify-between text-xs"
                         >
                           <div>
-                            <div className="flex items-center space-x-2">
-                              <span className="font-mono font-bold text-teal-800 bg-white px-1.5 py-0.5 rounded border border-teal-200">
-                                {visit.visitCode}
-                              </span>
-                              <span className="font-semibold text-slate-800">{patient.name}</span>
-                              <span className="text-[11px] px-1.5 py-0.2 rounded bg-teal-200/60 text-teal-900 font-medium">
-                                {visit.visitType}
-                              </span>
-                            </div>
-                            <p className="text-[11px] text-slate-500 mt-0.5 truncate max-w-md">
-                              {visit.complaint} • {visit.assignedDoctor}
-                            </p>
+                            <span className="font-mono font-bold text-teal-800 mr-2">{visit.visitCode}</span>
+                            <span className="font-medium text-slate-800">{patient.name}</span>
                           </div>
-                          <ChevronRight className="w-4 h-4 text-teal-600" />
+                          <ChevronRight className="w-3.5 h-3.5 text-teal-700" />
                         </div>
                       ))}
                     </div>
                   )}
 
-                  {/* Matching Patients suggestions */}
                   {matchingPatients.length > 0 ? (
                     <div className="p-2">
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-2.5 py-1">
-                        Matching Patients ({matchingPatients.length})
+                      <div className="text-[10px] font-semibold uppercase text-slate-400 px-2 py-0.5">
+                        Patients ({matchingPatients.length})
                       </div>
                       {matchingPatients.slice(0, 5).map((p) => (
                         <div
@@ -195,101 +163,51 @@ export const Navbar: React.FC<NavbarProps> = ({
                             setSearchQuery('');
                             setIsSearchFocused(false);
                           }}
-                          className="px-3 py-2 rounded-lg hover:bg-slate-50 cursor-pointer flex items-center justify-between text-xs transition-colors"
+                          className="px-2 py-1.5 rounded hover:bg-slate-50 cursor-pointer flex items-center justify-between text-xs"
                         >
-                          <div className="flex items-center space-x-3">
-                            <span className="font-mono font-bold text-teal-700 bg-teal-50 px-2 py-1 rounded border border-teal-200">
-                              {p.id}
-                            </span>
-                            <div>
-                              <div className="flex items-center space-x-2">
-                                <span className="font-bold text-slate-900">{p.name}</span>
-                                <span className="text-slate-500">
-                                  ({p.age}y / {p.sex})
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-slate-500">{p.phone} • {p.city}</p>
-                            </div>
+                          <div>
+                            <span className="font-mono font-semibold text-teal-700 mr-2">{p.id}</span>
+                            <span className="font-medium text-slate-800">{p.name}</span>
+                            <span className="text-slate-400 text-[11px] ml-1.5">({p.age}y, {p.sex})</span>
                           </div>
-                          <div className="text-right">
-                            <span className="inline-block px-2 py-0.5 text-[11px] font-semibold bg-slate-100 text-slate-700 rounded-full">
-                              {p.visits.length} {p.visits.length === 1 ? 'Visit' : 'Visits'}
-                            </span>
-                          </div>
+                          <span className="text-[11px] text-slate-400">{p.visits.length}v</span>
                         </div>
                       ))}
                     </div>
                   ) : searchQuery.trim().length > 0 ? (
-                    <div className="p-4 text-center text-xs text-slate-500">
-                      No matching patient found for &quot;{searchQuery}&quot;. Try typing &quot;12&quot; or &quot;P-000012&quot;.
+                    <div className="p-3 text-center text-xs text-slate-500">
+                      No results for &quot;{searchQuery}&quot;
                     </div>
                   ) : null}
-
-                  {/* Recently opened patients preview inside dropdown */}
-                  {recentPatients.length > 0 && (
-                    <div className="p-2 bg-slate-50/70">
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-2.5 py-1 flex items-center space-x-1.5">
-                        <History className="w-3.5 h-3.5 text-slate-400" />
-                        <span>Recently Opened Patients</span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-1 px-1">
-                        {recentPatients.slice(0, 4).map((p) => (
-                          <div
-                            key={p.id}
-                            onClick={() => {
-                              onOpenPatientFolder(p.id);
-                              setSearchQuery('');
-                              setIsSearchFocused(false);
-                            }}
-                            className="p-1.5 rounded-md hover:bg-white border border-transparent hover:border-slate-200 cursor-pointer text-xs transition-all flex items-center justify-between"
-                          >
-                            <div className="truncate">
-                              <span className="font-semibold text-slate-800">{p.name}</span>
-                              <span className="text-[11px] text-teal-700 font-mono ml-1.5">{p.id}</span>
-                            </div>
-                            <span className="text-[10px] text-slate-400">V{p.visits.length}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
             </div>
           ) : (
-            <div className="flex items-center space-x-2 text-sm text-slate-600">
-              <span className="font-semibold text-slate-900">{currentUser.department}</span>
-              <span className="text-slate-300">•</span>
-              <span className="text-xs text-slate-500">
-                {currentUser.role === 'doctor'
-                  ? 'Doctor Portal: OPD / IPD Patient Registration & Clinical Queue'
-                  : currentUser.role === 'nursery'
-                  ? 'Nursery Care Unit: NICU Incubators & Infant Vitals'
-                  : 'Central Dispensary: Prescription Queue & Medicine Stock'}
-              </span>
+            <div className="text-xs text-slate-600">
+              <span className="font-semibold text-slate-900">{currentUser.name}</span>
+              <span className="text-slate-400 mx-1.5">•</span>
+              <span>{currentUser.department}</span>
             </div>
           )}
         </div>
 
-        {/* Right: Quick Role Switcher & User Profile */}
+        {/* Right: Role Switcher dropdown */}
         <div className="flex items-center space-x-3">
-          {/* Role Switcher Dropdown */}
           <div className="relative" ref={roleMenuRef}>
             <button
               type="button"
               onClick={() => setIsRoleMenuOpen(!isRoleMenuOpen)}
-              className="flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-teal-400 bg-white hover:bg-slate-50 transition-colors shadow-xs text-xs font-medium text-slate-700"
+              className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded border border-slate-200 bg-white hover:bg-slate-50 text-xs font-medium text-slate-700 cursor-pointer"
             >
-              <div className={`w-2 h-2 rounded-full ${currentUser.role === 'admin' ? 'bg-teal-500' : currentUser.role === 'doctor' ? 'bg-blue-500' : currentUser.role === 'nursery' ? 'bg-rose-500' : 'bg-emerald-500'}`} />
-              <span className="font-semibold">Switch Role:</span>
-              <span className="capitalize text-slate-900 font-bold">{currentUser.role}</span>
-              <Layers className="w-3.5 h-3.5 text-slate-400 ml-1" />
+              <span>Role:</span>
+              <span className="capitalize font-semibold text-teal-800">{currentUser.role}</span>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
             </button>
 
             {isRoleMenuOpen && (
-              <div className="absolute right-0 mt-1.5 w-64 bg-white border border-slate-200 rounded-xl shadow-xl py-1 z-50">
-                <div className="px-3 py-2 border-b border-slate-100 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                  Test Different Roles
+              <div className="absolute right-0 mt-1 w-56 bg-white border border-slate-200 rounded-md shadow-md py-1 z-50">
+                <div className="px-3 py-1.5 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                  Switch Demo Role
                 </div>
                 {availableUsers.map((user) => (
                   <button
@@ -298,102 +216,56 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onSwitchRole(user);
                       setIsRoleMenuOpen(false);
                     }}
-                    className={`w-full text-left px-3 py-2.5 flex items-center justify-between text-xs hover:bg-slate-50 transition-colors ${
-                      user.role === currentUser.role ? 'bg-teal-50/60 font-semibold text-teal-900' : 'text-slate-700'
+                    className={`w-full text-left px-3 py-1.5 text-xs flex items-center justify-between hover:bg-slate-50 cursor-pointer ${
+                      user.role === currentUser.role ? 'bg-teal-50 text-teal-900 font-semibold' : 'text-slate-700'
                     }`}
                   >
-                    <div>
-                      <div className="font-bold flex items-center space-x-1.5">
-                        <span className="capitalize">{user.role}:</span>
-                        <span>{user.name}</span>
-                      </div>
-                      <p className="text-[11px] text-slate-500">{user.department}</p>
-                    </div>
-                    {user.role === currentUser.role && (
-                      <span className="w-2 h-2 rounded-full bg-teal-600" />
-                    )}
+                    <span className="capitalize">{user.role}: {user.name.split(' ')[1] || user.name}</span>
+                    {user.role === currentUser.role && <span className="w-1.5 h-1.5 rounded-full bg-teal-700" />}
                   </button>
                 ))}
                 <div className="border-t border-slate-100 mt-1 pt-1">
                   <button
                     onClick={onLogout}
-                    className="w-full text-left px-3 py-2 text-xs text-rose-600 hover:bg-rose-50 font-medium flex items-center space-x-1.5"
+                    className="w-full text-left px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-50 flex items-center space-x-1.5 cursor-pointer"
                   >
                     <LogOut className="w-3.5 h-3.5" />
-                    <span>Back to Role Selection Screen</span>
+                    <span>Role Picker</span>
                   </button>
                 </div>
               </div>
             )}
           </div>
 
-          {/* User Avatar badge */}
-          <div className="flex items-center space-x-2.5 pl-2 border-l border-slate-200">
-            <div className={`w-8 h-8 rounded-full ${currentUser.avatarColor} text-white flex items-center justify-center font-bold text-xs shadow-xs`}>
-              {currentUser.name.charAt(0)}
-            </div>
-            <div className="hidden lg:block text-left">
-              <p className="text-xs font-bold text-slate-800 leading-tight">{currentUser.name}</p>
-              <p className="text-[10px] text-slate-500 capitalize">{currentUser.title.split('(')[0]}</p>
-            </div>
+          <div className="text-right">
+            <p className="text-xs font-semibold text-slate-800">{currentUser.name}</p>
+            <p className="text-[10px] text-slate-500 capitalize">{currentUser.role}</p>
           </div>
         </div>
       </div>
 
-      {/* Admin Quick Search: "Recently opened patients" quick switch bar */}
+      {/* Admin Recently Opened strip */}
       {currentUser.role === 'admin' && (
-        <div className="bg-slate-50/80 px-6 py-1.5 border-t border-slate-200/80 flex items-center text-xs gap-3 overflow-x-auto">
-          <div className="flex items-center space-x-1 text-slate-500 text-[11px] font-semibold uppercase tracking-wider shrink-0">
-            <History className="w-3.5 h-3.5 text-teal-600" />
-            <span>Recently Opened:</span>
-          </div>
-
-          <div className="flex items-center space-x-2 overflow-x-auto no-scrollbar py-0.5">
-            {recentPatients.length > 0 ? (
-              recentPatients.map((p) => (
-                <button
-                  key={p.id}
-                  onClick={() => onOpenPatientFolder(p.id)}
-                  className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-white hover:bg-teal-50 border border-slate-200 hover:border-teal-300 text-slate-700 hover:text-teal-800 text-xs transition-all shadow-2xs shrink-0 cursor-pointer"
-                >
-                  <span className="font-semibold">{p.name}</span>
-                  <span className="font-mono text-[10px] text-teal-700 font-bold bg-teal-50/80 px-1 rounded">
-                    {p.id}
-                  </span>
-                  <span className="text-[10px] text-slate-400">({p.visits.length}v)</span>
-                </button>
-              ))
-            ) : (
-              <span className="text-slate-400 text-xs italic">
-                Tip: Search &quot;12&quot; or &quot;P-000012&quot; above to open Ayesha Noor&apos;s folder.
-              </span>
-            )}
-
-            {/* Quick Demo Shortcuts for quick test */}
-            <div className="flex items-center space-x-1 pl-2 border-l border-slate-200 shrink-0">
-              <span className="text-[10px] text-slate-400 font-medium">Try:</span>
-              <button
-                onClick={() => onOpenPatientFolder('P-000012', 'P-000012-V03')}
-                className="px-2 py-0.5 rounded bg-teal-100/70 hover:bg-teal-200 text-teal-800 text-[11px] font-mono font-semibold transition-colors"
-                title="Jump directly to Laparoscopic Surgery Visit 03"
-              >
-                P-000012-V03
-              </button>
-              <button
-                onClick={() => onOpenPatientFolder('P-000007', 'P-000007-V01')}
-                className="px-2 py-0.5 rounded bg-blue-100/70 hover:bg-blue-200 text-blue-800 text-[11px] font-mono font-semibold transition-colors"
-                title="Jump directly to Emergency Trauma Visit 01"
-              >
-                P-000007-V01
-              </button>
-              <button
-                onClick={() => onOpenPatientFolder('P-000004')}
-                className="px-2 py-0.5 rounded bg-rose-100/70 hover:bg-rose-200 text-rose-800 text-[11px] font-mono font-semibold transition-colors"
-                title="Open Fatima Bibi (Maternity/Nursery baby mother)"
-              >
-                P-000004
-              </button>
-            </div>
+        <div className="bg-slate-50 px-6 py-1.5 border-t border-slate-200 flex items-center text-xs gap-2 overflow-x-auto">
+          <span className="text-[11px] font-medium text-slate-500 shrink-0">Recent:</span>
+          {recentPatients.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => onOpenPatientFolder(p.id)}
+              className="inline-flex items-center space-x-1 px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700 hover:border-teal-600 text-xs transition-colors shrink-0 cursor-pointer"
+            >
+              <span>{p.name}</span>
+              <span className="font-mono text-[10px] text-teal-700">({p.id})</span>
+            </button>
+          ))}
+          <div className="flex items-center space-x-1 text-[11px] text-slate-400 pl-2 shrink-0">
+            <span>Try:</span>
+            <button
+              onClick={() => onOpenPatientFolder('P-000012', 'P-000012-V03')}
+              className="text-teal-700 hover:underline font-mono"
+            >
+              P-000012-V03
+            </button>
           </div>
         </div>
       )}
